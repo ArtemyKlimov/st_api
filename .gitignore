@@ -1,0 +1,8 @@
+*.exe
+*exe~
+bin/
+.idea/
+.build/
+*.so
+*.pem
+*.log

@@ -1,0 +1,288 @@
+basePath: /api/v1
+definitions:
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.getAllRegionsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Region'
+        type: array
+    type: object
+  handler.getDepositsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Deposit'
+        type: array
+    type: object
+  handler.getMineralsResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Minerals'
+        type: array
+    type: object
+  handler.getMineraltypesResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.MineralTypes'
+        type: array
+    type: object
+  handler.getResponseResponse:
+    properties:
+      data:
+        items:
+          $ref: '#/definitions/models.Response'
+        type: array
+    type: object
+  models.Deposit:
+    properties:
+      name:
+        type: string
+    type: object
+  models.MineralTypes:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Minerals:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Region:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Response:
+    properties:
+      coast_dist:
+        type: number
+      coast_rate:
+        type: number
+      deposit_name:
+        type: string
+      g_temp:
+        type: number
+      oopt:
+        type: string
+      perm_distr:
+        type: string
+      response:
+        type: string
+      t_trend:
+        type: number
+      yed_dist:
+        type: number
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API for ecology section of arctech DATA
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: SunTechnics API - OpenAPI
+  version: "1.0"
+paths:
+  /deposits:
+    get:
+      description: Получить список месторождений в заданном регионе
+      operationId: get-deposits
+      parameters:
+      - description: Id региона
+        format: int
+        in: query
+        name: regionId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getDepositsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получить список месторождений в заданном регионе
+      tags:
+      - deposits
+  /minerals:
+    get:
+      description: Получить список полезных ископаемых указанного типа в заданном
+        регионе
+      operationId: get-minerals
+      parameters:
+      - description: ID региона
+        format: int
+        in: query
+        name: regionId
+        type: integer
+      - description: ID типа полезных ископаемых
+        format: int
+        in: query
+        name: typeId
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getMineralsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получить список полезных ископаемых указанного типа в заданном регионе
+      tags:
+      - minerals
+  /mineraltypes:
+    get:
+      description: Получить список типов полезных ископаемых
+      operationId: get-mineral-types
+      parameters:
+      - description: ID региона
+        format: int
+        in: query
+        name: regionId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getMineraltypesResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получить список типов полезных ископаемых
+      tags:
+      - mineral types
+  /regions:
+    get:
+      description: Получить список наблюдаемых регионов
+      operationId: get-all-regions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getAllRegionsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получить список наблюдаемых регионов
+      tags:
+      - regions
+  /response:
+    get:
+      description: Получить расчет по мониторингу ММП
+      operationId: get-response
+      parameters:
+      - description: ID of the region where minerals are extracted
+        format: int
+        in: query
+        name: regionId
+        required: true
+        type: integer
+      - description: ID of the mineral
+        format: int
+        in: query
+        name: mineralId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.getResponseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Получить расчет по мониторингу ММП
+      tags:
+      - response
+swagger: "2.0"
